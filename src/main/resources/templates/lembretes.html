@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lembretes</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+<h1>Agenda Pessoal</h1>
+<div style="text-align: center; margin-bottom: 20px;">
+    <a href="/lembretes/novo" class="button">Adicionar Novo Lembrete</a>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Descrição</th>
+        <th>Data</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lembrete : ${lembretes}">
+        <td th:text="${lembrete.id}"></td>
+        <td th:text="${lembrete.titulo}"></td>
+        <td th:text="${lembrete.descricao}"></td>
+        <td th:text="${lembrete.data}"></td>
+        <td>
+            <a th:href="@{/lembretes/editar/{id}(id=${lembrete.id})}" class="button button-edit">Editar</a>
+            <a th:href="@{/lembretes/deletar/{id}(id=${lembrete.id})}" class="button button-delete">Deletar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
