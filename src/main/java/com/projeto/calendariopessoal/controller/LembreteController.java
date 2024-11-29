@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/lembretes")
@@ -16,11 +18,27 @@ public class LembreteController {
     @Autowired
     private LembreteService lembreteService;
 
+    // Exibe os lembretes na página
     @GetMapping
     public String getAllLembretes(Model model) {
         List<Lembrete> lembretes = lembreteService.findAll();
         model.addAttribute("lembretes", lembretes);
         return "lembretes";
+    }
+
+    // Retorna os lembretes no formato que o FullCalendar entende
+    @GetMapping("/events")
+    @ResponseBody
+    public List<Object> getLembretesForCalendar() {
+        List<Lembrete> lembretes = lembreteService.findAll();
+        return lembretes.stream().map(lembrete -> {
+            // Retorna um objeto com dados formatados para o FullCalendar
+            return Map.of(
+                    "title", lembrete.getTitulo(),
+                    "start", lembrete.getData().toString(),  // A data deve estar no formato 'yyyy-MM-dd'
+                    "description", lembrete.getDescricao()
+            );
+        }).collect(Collectors.toList());
     }
 
     @GetMapping("/novo")
